@@ -1,0 +1,13 @@
+*** TERMY INFORMATION ***
+By: @justintsako
+For: @_.lzxsl
+
+Time Created: 12/26/25
+Version: 0.9 (Late-Stage)
+
+>>> About TERMY
+Termy is a custom 'terminal' like program. The differences being that it is NOT a real shell or terminal. This program is actually a love letter. I've written some love within the code and the outside.
+
+There are many hidden details within the program, so hopefully she catches them before I need to tell her. 
+
+Though I've mentioned that this is not a real terminal, the program is meant to mimic  a real one. There are some commands built in that can be found in real terminals. So, if you're familiar with a terminal, you can get a good boost.
