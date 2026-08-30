@@ -10,9 +10,17 @@ import time
 import pickle
 import curses
 import ctypes
-import pyreadline3 as readline
 import json
 import subprocess
+from pathlib import Path
+
+try:
+    import readline
+except ImportError:
+    try:
+        import pyreadline3 as readline
+    except ImportError:
+        readline = None
 
 IS_WINDOWS = os.name == "nt"
 if IS_WINDOWS:
@@ -159,12 +167,47 @@ def grand_opening():
     print(f'{CYAN}Custom Terminal{RESET}                          {GREEN}@justintsako{RESET}\n')
 
 def open_image(image_path):
-    if sys.platform.startswith("win"):
-        os.startfile(image_path)
-    elif sys.platform == "darwin":
-        subprocess.run(["open", image_path])
-    else:
-        subprocess.run(["xdg-open", image_path])
+    image_path = os.path.abspath(image_path)
+
+    try:
+        if sys.platform.startswith("win"):
+            os.startfile(image_path)
+            return True
+        elif sys.platform == "darwin":
+            subprocess.Popen(["open", image_path])
+            return True
+        else:
+            browser = os.environ.get("BROWSER")
+            if browser:
+                try:
+                    import shlex
+                    subprocess.Popen(
+                        shlex.split(browser) + [Path(image_path).as_uri()]
+                    )
+                    return True
+                except (FileNotFoundError, ValueError):
+                    pass
+
+            for command in (
+                ["code", "--reuse-window", image_path],
+                ["code-insiders", "--reuse-window", image_path],
+                ["xdg-open", image_path],
+                ["gio", "open", image_path],
+            ):
+                try:
+                    subprocess.Popen(command)
+                    return True
+                except FileNotFoundError:
+                    continue
+
+            try:
+                import webbrowser
+                webbrowser.open(f"file://{image_path}")
+                return True
+            except Exception:
+                return False
+    except Exception:
+        return False
 
 # File System for things to Work! All for her, I love her, a lot.
 
