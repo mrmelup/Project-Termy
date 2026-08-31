@@ -114,6 +114,7 @@ has_admin = False
 tcl_installed = False
 tcl_version = "1.3.3"
 tcl_install_counter = 0
+tcl_profile_setup = False
 
 def clear_console():
     os.system('cls' if os.name == 'nt' else 'clear')

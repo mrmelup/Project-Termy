@@ -157,7 +157,7 @@ filesystem = define_filesystem()
 
 # System Variables
 system_storage: int = 64 # this python's way of stating a direct integer
-system_version = "1.9.680"
+system_version = "1.9.69"
 last_update = "8/29/26"
 color_accent = MAGENTA
 command_line_color = GREEN
@@ -224,6 +224,7 @@ def save_data():
         "admin_msg": elements.admin_msg,
         "tcl_installed": elements.tcl_installed,
         "tcl_install_counter": elements.tcl_install_counter,
+        "tcl_profile_setup": elements.tcl_profile_setup,
         "unlocked_tmy": elements.unlocked_tmy,
         "unlocked_jsn": elements.unlocked_jsn,
         "unlocked_lzl": elements.unlocked_lzl,
@@ -263,7 +264,7 @@ def load_data():
     # TCL Variables
     global tcl_installed
     global tcl_install_counter
-
+    global tcl_profile_setup
     # Achievements
     global command_counter
     global gumarang_rarity_counter
@@ -336,6 +337,7 @@ def load_data():
     elements.admin_msg = data["admin_msg"]
     elements.tcl_installed = data["tcl_installed"]
     elements.tcl_install_counter = data["tcl_install_counter"]
+    elements.tcl_profile_setup = data["tcl_profile_setup"]
     elements.unlocked_tmy = data["unlocked_tmy"]
     elements.unlocked_jsn = data["unlocked_jsn"]
     elements.unlocked_lzl = data["unlocked_lzl"]
@@ -587,6 +589,7 @@ def main_terminal():
     global user_statuses
     global tcl_installed
     global tcl_install_counter
+    global tcl_profile_setup
 
     # Usages for Strips
     global ping_usage
@@ -952,7 +955,8 @@ def main_terminal():
                         "the-designer.txt": f"{MAGENTA}{UNDERLINE}April 21, 2026{RESET} - Back to design\n\n{CYAN}The Designer{RESET}: Isn't it a bit too early for this?\n{MAGENTA}Prime Entity{RESET}: What do you mean?\n{CYAN}The Designer{RESET}: It's pretty early in the morning. I can't really think of any ideas right now.\n{MAGENTA}Prime Entity{RESET}: That's completely fine. No worries about getting a good design at this second.\n{CYAN}The Designer{RESET}: Mm, okay. Do you think I can come back later?\n{MAGENTA}Prime Entity{RESET}: That's completely okay. Come back when you have an idea.\n{CYAN}The Designer{RESET}: Gotcha.\n\n{GREEN}The Treasurer{RESET}: Yo. Anything come up yet?\n{MAGENTA}Prime Entity{RESET}: We're going to have to wait for a design. He's out of ideas for the moment.\n{GREEN}The Treasurer{RESET}: Maybe I can make a design!\n{GREEN}The Treasurer{RESET}: Wait, design for what though?\n{MAGENTA}Prime Entity{RESET}: The contents of the C-Drive. We don't have anything in it right now.\n{GREEN}The Treasurer{RESET}: Oh.\n{GREEN}The Treasurer{RESET}: OH! MAKE IT RUN ON SNOOOPY.\n{MAGENTA}Prime Entity{RESET}: Huh?\n{GREEN}The Treasurer{RESET}: Have it run... on a picture of SNOOPY!\n{MAGENTA}Prime Entity{RESET}: Did you just come up with that on the spot?\n{GREEN}The Treasurer{RESET}: Perchance.\n{MAGENTA}Prime Entity{RESET}: You can't just say perchance.\n{GREEN}The Treasurer{RESET}: Well I just did B).\n{MAGENTA}Prime Entity{RESET}: Y'know what? You win.\n{MAGENTA}Prime Entity{RESET}: But only because I'm in a good mood.\n\n{CYAN}The Designer{RESET}: I'm back. I have an idea.\n{MAGENTA}Prime Entity{RESET}: We have an idea already.\n{CYAN}The Designer{RESET}: Oh, what's this idea?\n{MAGENTA}Prime Entity{RESET}: Don't laugh.\n",
                         "snoopy.tmy": f"\n{WHITE}⠀⠀⠀⠀⠀⠀⠰⡊⣿⣷⣂⠄⠀⠀⠀⠀⠀⠀⠀⠀\n⠀⠀⣀⣴⢶⠀⠀⠈⣉⣽⣯⠃⠀⠀⠀⠀⠀⠀⠀⠀\n⢀⢴⡿⡷⠁⣠⠊⠉⠂⠀⠀⠙⠒⠒⠒⠒⠢⢀⠀⠀\n⡜⣿⣿⣵⣶⡃⠀⠀⢀⡤⠂⠈⠉⠀⣀⡀⠀⠀⢆⠀\n⠙⠾⠿⠃⢹⠀⠀⠀⠀⠀⠀⠀⠀⠈⠋⠀⡀⠀⡞⠀\n⠀⠀⠀⠀⠘⢆⠀⠀⠀⠣⣀⠀⠀⠀⢀⡴⠵⠊⠀⠀\n⠀⠀⠀⠀⠀⠀⠑⣆⡤⠤⢬⠙⠉⡽⠋⢐⡲⢲⠀⠀\n⠀⠀⠀⠀⠀⢰⡓⠃⠷⠤⠴⠗⠈⠉⠈⠁⣀⢰⠃⠀\n⠀⠀⠀⠀⠀⠀⠥⣆⠖⠒⠢⡀⠀⠀⠈⢏⠈⠁⠀⠀\n⠀⠀⠀⠀⠀⠀⠀⠀⠀⢗⣤⠁⠀⠀⠀⠀⠃⠀⠀⠀\n⠀⠀⠀⠀⠀⠀⠀⢠⠊⢢⣇⠀⠀⠀⣀⢐⠗⡲⡰⢢\n⠀⠀⠀⠀⠀⠀⠀⠘⡆⠀⠉⠠⢏⡁⢸⢇⠄⢆⠔⡸\n⠀⠀⠀⠀⠀⠀⠀⠀⠈⠳⢤⣆⣂⡹⠸⣀⣃⡫⠞⠁{RESET}\n",
                         "growth.txt": f"{MAGENTA}{UNDERLINE}April 29, 2026{RESET} - You are no different than I\n\n{MAGENTA}Prime Entity{RESET}: Wake up! It's the day we age.\n{RED}System Overlord{RESET}: You mean our birthday.\n{GREEN}The Treasurer{RESET}: Dude, you mean my birthday?\n{RED}System Overlord{RESET}: Huh? Wait. I thought we were just made? We weren't born?\n{MAGENTA}Prime Entity{RESET}: I said that?\n{RED}System Overlord{RESET}: Yeah, you did say something like that.\n{MAGENTA}Prime Entity{RESET}: Well, that's not entirely the truth.\n{MAGENTA}Prime Entity{RESET}: I was born. But you guys came along as the developer aged.\n{GREEN}The Treasurer{RESET}: Woah now, so we were all born at the same time?\n{MAGENTA}Prime Entity{RESET}: You existed the moment I was born, which is exactly the same time the developer was born.\n{RED}System Overlord{RESET}: I thought you are the developer.\n{MAGENTA}Prime Entity{RESET}: This seems to be a really hard concept to grasp for you guys.\n{CYAN}The Designer{RESET}: I mean yeah, we all thought the same thing.\n{RED}System Overlord{RESET}: Have you been hiding this from us?\n\n{MAGENTA}Prime Entity{RESET}: You are all the same. We are all the same.\n{MAGENTA}Prime Entity{RESET}: We are all the same, the same mind, the same protector and attacker. I am your greatest enemy and ally.\n{MAGENTA}Prime Entity{RESET}: I am no different than you. But rather, I probably should face punishment.\n{RED}System Overlord{RESET}: This entire time. I was you. And you were me. In the same body?\n{MAGENTA}Prime Entity{RESET}: Correct.\n{MAGENTA}Prime Entity{RESET}: You are the thoughts, the overthinking, the comfort, the designer, and the leader of the developer. You are simply being written.\n{GREEN}The Treasurer{RESET}: Oooh. Which one am I?\n{MAGENTA}Prime Entity{RESET}: You're his comfort.\n{RED}System Overlord{RESET}: Wait, am I just the thoughts?\n{MAGENTA}Prime Entity{RESET}: Yes.\n\n{CYAN}The Designer{RESET}: Why do you say you deserve punishment?\n{MAGENTA}Prime Entity{RESET}: Many of the problems we face are due to my inability to control his emotions.\n{MAGENTA}Prime Entity{RESET}: He is not very tuned with his logic. He feels more than he thinks.\n{RED}System Overlord{RESET}: Is that why there is a judge?\n{MAGENTA}Prime Entity{RESET}: You're getting it now.\n\n{CYAN}The Designer{RESET}: So why did you. I mean, we... make this? For someone he likes?\n{MAGENTA}Prime Entity{RESET}: Because once she came, his logic and emotions, for the first time, felt in tune together.\n{MAGENTA}Prime Entity{RESET}: She removed the barriers of the belief that logic and emotion cannot be one.\n{MAGENTA}Prime Entity{RESET}: She was the only one willing to stay with us.\n{RED}System Overlord{RESET}: So she put up with us?\n{MAGENTA}Prime Entity{RESET}: I'm not sure how, you guys are already stressful enough.\n{GREEN}The Treasurer{RESET}: Wow, way to throw us under the bus.\n{MAGENTA}Prime Entity{RESET}: We're the same remember?\n{GREEN}The Treasurer{RESET}: Ohhh yeah. Right right.\n{RED}System Overlord{RESET}: I miss her.\n{MAGENTA}Prime Entity{RESET}: We can call her now.\n", # We are all the same, the same mind, the same protector and attacker. I am your greatest enemy and ally.
-                        "self-love.txt": f"{MAGENTA}{UNDERLINE}May 1, 2026{RESET} - It helped me, she did that\n\n{CYAN}The Designer{RESET}: What do you think of this design?\n{MAGENTA}Prime Entity{RESET}: I think it looks pretty neat.\n{MAGENTA}Prime Entity{RESET}: How come you made something for her? I didn't tell you to do that.\n{CYAN}The Designer{RESET}: Well, I thought it would be a nice touch to what we're making.\n{MAGENTA}Prime Entity{RESET}: You want to include it in the project?\n{CYAN}The Designer{RESET}: Yeah... do you not like it?\n{MAGENTA}Prime Entity{RESET}: I do like it. I'm simply curious.\n{CYAN}The Designer{RESET}: It's just my way of saying thanks.\n{MAGENTA}Prime Entity{RESET}: I find that very sweet of you.\n{CYAN}The Designer{RESET}: Well, I am you after all.\n{MAGENTA}Prime Entity{RESET}: Well we try our best.\n\n{CYAN}The Designer{RESET}: Honestly, what made you think about doing this?\n{CYAN}The Designer{RESET}: I know it's a 'thanks', but was that all there was to this project?\n{MAGENTA}Prime Enitty{RESET}: This wasn't the first programming project I've made for her. Many of them didn't go through.\n{MAGENTA}Prime Entity{RESET}: I told her I was working on something. A coding project. That has been going over the past couple of months.\n{MAGENTA}Prime Entity{RESET}: And each time, she has been eager to see it.\n{MAGENTA}Prime Entity{RESET}: That smile. The excitement in her voice. It drives me to finish this.\n{CYAN}The Designer{RESET}: She really is that special to you, huh?\n{MAGENTA}Prime Entity{RESET}: I really hope to marry her one day.\n{MAGENTA}Prime Entity{RESET}: That's something I never really say out loud.\n{CYAN}The Designer{RESET}: I like that you're able to be honest with yourself.\n{CYAN}The Designer{RESET}: I think she'll love this project.\n{MAGENTA}Prime Entity{RESET}: I hope so.\n{MAGENTA}Prime Entity{RESET}: It's not finished still. That's what is keeping me busy.\n{CYAN}The Designer{RESET}: I don't think she would have wanted you to stress about it so much.\n{MAGENTA}Prime Entity{RESET}: Yeah, but if I earned a dollar for each day I stressed myself out, I'd be retired by now.\n{CYAN}The Designer{RESET}: Relax a little. This project isn't just for her. Let it be a source of comfort for you.\n{MAGENTA}Prime Entity{RESET}: You're right.\n{CYAN}The Designer{RESET}: Don't feel bad about not having the project be finished for now.\n{CYAN}The Designer{RESET}: You work at your pace. There is nothing wrong with it.\n{MAGENTA}Prime Entity{RESET}: I guess I'm just really worried if she would like it.\n{CYAN}The Designer{RESET}: Let's just focus on having the project be finished.\n{CYAN}The Designer{RESET}: If you worry so much about how she won't like it, you'll make a product she actually won't like.\n{MAGENTA}Prime Entity{RESET}: You raise a good point.\n{MAGENTA}Prime Entity{RESET}: I'll take a break for now. Thank you for speaking to me.\n{CYAN}The Designer{RESET}: I'll head away too. No problem.\n",
+                        "self-love.txt": f"{MAGENTA}{UNDERLINE}May 1, 2026{RESET} - She would have wanted you to\n\n{CYAN}The Designer{RESET}: What do you think of this design?\n{MAGENTA}Prime Entity{RESET}: I think it looks pretty neat.\n{MAGENTA}Prime Entity{RESET}: How come you made something for her? I didn't tell you to do that.\n{CYAN}The Designer{RESET}: Well, I thought it would be a nice touch to what we're making.\n{MAGENTA}Prime Entity{RESET}: You want to include it in the project?\n{CYAN}The Designer{RESET}: Yeah... do you not like it?\n{MAGENTA}Prime Entity{RESET}: I do like it. I'm simply curious.\n{CYAN}The Designer{RESET}: It's just my way of saying thanks.\n{MAGENTA}Prime Entity{RESET}: I find that very sweet of you.\n{CYAN}The Designer{RESET}: Well, I am you after all.\n{MAGENTA}Prime Entity{RESET}: Well we try our best.\n\n{CYAN}The Designer{RESET}: Honestly, what made you think about doing this?\n{CYAN}The Designer{RESET}: I know it's a 'thanks', but was that all there was to this project?\n{MAGENTA}Prime Enitty{RESET}: This wasn't the first programming project I've made for her. Many of them didn't go through.\n{MAGENTA}Prime Entity{RESET}: I told her I was working on something. A coding project. That has been going over the past couple of months.\n{MAGENTA}Prime Entity{RESET}: And each time, she has been eager to see it.\n{MAGENTA}Prime Entity{RESET}: That smile. The excitement in her voice. It drives me to finish this.\n{CYAN}The Designer{RESET}: She really is that special to you, huh?\n{MAGENTA}Prime Entity{RESET}: I really hope to marry her one day.\n{MAGENTA}Prime Entity{RESET}: That's something I never really say out loud.\n{CYAN}The Designer{RESET}: I like that you're able to be honest with yourself.\n{CYAN}The Designer{RESET}: I think she'll love this project.\n{MAGENTA}Prime Entity{RESET}: I hope so.\n{MAGENTA}Prime Entity{RESET}: It's not finished still. That's what is keeping me busy.\n{CYAN}The Designer{RESET}: I don't think she would have wanted you to stress about it so much.\n{MAGENTA}Prime Entity{RESET}: Yeah, but if I earned a dollar for each day I stressed myself out, I'd be retired by now.\n{CYAN}The Designer{RESET}: Relax a little. This project isn't just for her. Let it be a source of comfort for you.\n{MAGENTA}Prime Entity{RESET}: You're right.\n{CYAN}The Designer{RESET}: Don't feel bad about not having the project be finished for now.\n{CYAN}The Designer{RESET}: You work at your pace. There is nothing wrong with it.\n{MAGENTA}Prime Entity{RESET}: I guess I'm just really worried if she would like it.\n{CYAN}The Designer{RESET}: Let's just focus on having the project be finished.\n{CYAN}The Designer{RESET}: If you worry so much about how she won't like it, you'll make a product she actually won't like.\n{MAGENTA}Prime Entity{RESET}: You raise a good point.\n{MAGENTA}Prime Entity{RESET}: I'll take a break for now. Thank you for speaking to me.\n{CYAN}The Designer{RESET}: I'll head away too. No problem.\n",
+                        "a-routine.txt": f"{MAGENTA}{UNDERLINE}May 19, 2026{RESET} - Summer time is approaching\n\n{RED}System Overlord{RESET}: These exams are going to be rough with our time.\n{RED}System Overlord{RESET}: Are you sure we're going to be able to work during this week?\n{GREEN}The Treasurer{RESET}: Woahhh heck nahh.\n{GREEN}The Treasurer{RESET}: We cannot be doing allat while exams are going on.\n{RED}System Overlord{RESET}: What about some small changes?\n{GREEN}The Treasurer{RESET}: I'm not sure if I should trust that.\n{GREEN}The Treasurer{RESET}: You always end up adding too much. LIAR!!\n{RED}System Overlord{RESET}: I'm not a liar. I just like working on this project\n{GREEN}The Treasurer{RESET}: Okay, but what about your exaaams?\n{RED}System Overlord{RESET}: Well, it's not like I enjoy taking exams.\n{RED}System Overlord{RESET}: I just find it much more interesting and fun to be working on this.\n{GREEN}The Treasurer{RESET}: ",
                     }
                     if "ascii" not in filesystem["@main"]["users"]["justin"]:
                         print(f"{color_accent}*{RESET} You've unlocked a new directory called 'ascii' >> {command_line_color}@main/users/justin{RESET}!")
@@ -1984,8 +1988,9 @@ def main_terminal():
                 print_centered("Termy's Command Line")
                 print_centered("Do [tcl -help] for more information")
                 print(f"{RESET}")  
+                continue
         
-            elif argument in ("-int", "-install"):
+            if argument in ("-int", "-install"):
                 if elements.tcl_installed:
                     print(f"<{MAGENTA}Command Line: STOP{RESET}> You already have TCL (Termy's Command Line) installed.")
                 else:
@@ -1994,7 +1999,7 @@ def main_terminal():
                     elements.tcl_install_counter += 1
                     elements.tcl_installed = True
             
-            elif argument in ("-unint", "-uninstall"):
+            if argument in ("-unint", "-uninstall"):
                 if elements.tcl_installed:
                     print(f"{MAGENTA}${RESET} Uninstalling...")
                     time.sleep(4)
@@ -2004,24 +2009,30 @@ def main_terminal():
                 else:
                     print(f"<{MAGENTA}Command Line: STOP{RESET}> You do not currently have TCL (Termy's Command Line) installed.")
 
-            elif argument in "-status":
+            if argument in "-status":
                 if elements.tcl_installed == True:
                     print(f"{MAGENTA}${RESET} TCL (Termy's Command Line) is installed and updated.")
                 else:
                     print(f"{MAGENTA}${RESET} TCL (Termy's Command Line) is not installed on this terminal.")
             
-            elif argument in "-help":
+            if argument in "-help":
                 print(f"{MAGENTA}${RESET} Available Commands for TCL: {", ".join(tcl_arguments)}")
 
-            elif argument in "-?":
+            if argument in "-?":
                 print(f"{MAGENTA}?{RESET} TCL is the inner shell of Termy. You'll find some even deeper things that cannot be seen in the regular shell.\n{MAGENTA}?{RESET} This is the system that is running the terminal. You cannot remove it or change it in any way.")
 
             # You're going to need to install TCL before using this command.
-            elif argument in ("-ver", "-version") and elements.tcl_installed == True:
+            if argument in ("-ver", "-version") and elements.tcl_installed == True:
                 print(f"{MAGENTA}${RESET} {elements.tcl_version}")
 
-            elif argument in ("-gamemode") and elements.tcl_installed == True:
+            if argument in ("-gamemode") and elements.tcl_installed == True:
                 print(f"{MAGENTA}${RESET} Turning ON GFAMEOAOSDKO")
+
+            if argument in ("-profile") and elements.tcl_installed == True:
+                if tcl_profile_setup == False:
+                    print(f"{MAGENTA}${RESET} You currently do not have a profile set up.\n{GRAY}  To make a profile, use [tcl -profile --setup]")
+                else:
+                    pass
 
 load_data()
 main_terminal()
