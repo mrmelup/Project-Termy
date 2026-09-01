@@ -158,7 +158,7 @@ filesystem = define_filesystem()
 # System Variables
 system_storage: int = 64 # this python's way of stating a direct integer
 system_version = "1.9.69"
-last_update = "8/29/26"
+last_update = "9/1/26"
 color_accent = MAGENTA
 command_line_color = GREEN
 admin_passcode: int = 8088
@@ -2032,7 +2032,7 @@ def main_terminal():
                 if tcl_profile_setup == False:
                     print(f"{MAGENTA}${RESET} You currently do not have a profile set up.\n{GRAY}  To make a profile, use [tcl -profile --setup]")
                 else:
-                    pass
+                    print(f"{MAGENTA}${RESET} Your profile is setup.")
 
 load_data()
 main_terminal()
