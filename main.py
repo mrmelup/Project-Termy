@@ -49,7 +49,7 @@ valid_commands = {
     "wordle", "strip", "strips", "2048", "whoami",
     "pwd", "change", "ch", "resetdata", "tmy", "jsn",
     "lzl", "help-boost", "stat", "stats", "statistics",
-    "tcl", "svd", "su",
+    "tcl", "svd", "su", "-wordle", "-sudoku", "-2048",
 }
 
 # For Keys 
@@ -158,7 +158,7 @@ filesystem = define_filesystem()
 # System Variables
 system_storage: int = 64 # this python's way of stating a direct integer
 system_version = "1.9.69"
-last_update = "9/1/26"
+last_update = "9/2/26"
 color_accent = MAGENTA
 command_line_color = GREEN
 admin_passcode: int = 8088
@@ -2028,11 +2028,15 @@ def main_terminal():
             if argument in ("-gamemode") and elements.tcl_installed == True:
                 print(f"{MAGENTA}${RESET} Turning ON GFAMEOAOSDKO")
 
-            if argument in ("-profile") and elements.tcl_installed == True:
-                if tcl_profile_setup == False:
+            if argument in "-profile" and elements.tcl_installed == True:
+                if elements.tcl_profile_setup == False:
+                    if user_input in "--setup":
+                        elements.tcl_profile_setup = True
+                        print(f"{MAGENTA}${RESET} Profile setup complete.")
                     print(f"{MAGENTA}${RESET} You currently do not have a profile set up.\n{GRAY}  To make a profile, use [tcl -profile --setup]")
                 else:
                     print(f"{MAGENTA}${RESET} Your profile is setup.")
+                
 
 load_data()
 main_terminal()
