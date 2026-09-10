@@ -158,7 +158,7 @@ filesystem = define_filesystem()
 # System Variables
 system_storage: int = 64 # this python's way of stating a direct integer
 system_version = "1.9.69"
-last_update = "9/2/26"
+last_update = "9/10/26"
 color_accent = MAGENTA
 command_line_color = GREEN
 admin_passcode: int = 8088
@@ -687,7 +687,7 @@ def main_terminal():
             print(f"{color_accent}A reason for loving you! {RESET}--> {random.choice(reason)}")
             continue
         # Git, Vim, Pip, and Bash
-        if command_part[0] in ("git", "vim", "pip", "bash"):
+        if command_part[0] in ("git", "vim", "pip", "bash", "pip3"):
             print(f"This is a fake shell, so {GREEN}{command_part[0]}{RESET} is not available!\n{GRAY}For a simulated command line, use {UNDERLINE}tcl{RESET}{GRAY} for special things.{RESET}") # TCL = Termy's Command Line
             continue
         # Colors (Test the colors)
@@ -1976,7 +1976,7 @@ def main_terminal():
         - This is the small version of TCL in Termy. To get the full thing, you must install TCL!
         """
         tcl_arguments = ["-int", "-install", "-unintstall", "-status", "-help", "-?"]
-        if command_part[0] in "tcl":
+        if command_part[0] == "tcl":
             if len(command_part) < 2:
                 print(f"{MAGENTA}")
                 print_centered("__    _____ ____ _        __")
@@ -2009,28 +2009,28 @@ def main_terminal():
                 else:
                     print(f"<{MAGENTA}Command Line: STOP{RESET}> You do not currently have TCL (Termy's Command Line) installed.")
 
-            if argument in "-status":
+            if argument == "-status":
                 if elements.tcl_installed == True:
                     print(f"{MAGENTA}${RESET} TCL (Termy's Command Line) is installed and updated.")
                 else:
                     print(f"{MAGENTA}${RESET} TCL (Termy's Command Line) is not installed on this terminal.")
             
-            if argument in "-help":
+            if argument == "-help":
                 print(f"{MAGENTA}${RESET} Available Commands for TCL: {", ".join(tcl_arguments)}")
 
-            if argument in "-?":
+            if argument == "-?":
                 print(f"{MAGENTA}?{RESET} TCL is the inner shell of Termy. You'll find some even deeper things that cannot be seen in the regular shell.\n{MAGENTA}?{RESET} This is the system that is running the terminal. You cannot remove it or change it in any way.")
 
             # You're going to need to install TCL before using this command.
             if argument in ("-ver", "-version") and elements.tcl_installed == True:
                 print(f"{MAGENTA}${RESET} {elements.tcl_version}")
 
-            if argument in ("-gamemode") and elements.tcl_installed == True:
+            if argument == "-gamemode" and elements.tcl_installed == True:
                 print(f"{MAGENTA}${RESET} Turning ON GFAMEOAOSDKO")
 
-            if argument in "-profile" and elements.tcl_installed == True:
+            if argument == "-profile" and elements.tcl_installed == True:
                 if elements.tcl_profile_setup == False:
-                    if user_input in "--setup":
+                    if len(command_part) > 2 and command_part[2] == "--setup":
                         elements.tcl_profile_setup = True
                         print(f"{MAGENTA}${RESET} Profile setup complete.")
                     print(f"{MAGENTA}${RESET} You currently do not have a profile set up.\n{GRAY}  To make a profile, use [tcl -profile --setup]")

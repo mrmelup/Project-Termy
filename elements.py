@@ -15,6 +15,12 @@ import subprocess
 from pathlib import Path
 
 try:
+    from playsound import playsound
+except ImportError:
+    def playsound(*args, **kwargs):
+        return None
+
+try:
     import readline
 except ImportError:
     try:
