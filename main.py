@@ -97,12 +97,16 @@ def define_filesystem():
                 }
             },
             "documents": {
-                "information.txt": f"{UNDERLINE}{MAGENTA}ABOUT THIS DIRECTORY{RESET}\n\nThis directory is a place where venting and inner thoughts reside. It is completely your choice to read and use it. If you feel like you don't want to ruin your current mood, don't read them.",
-                "maybe-i-should.txt": "I'm not sure if I'm going to get this project out to her. It's been far too long and honestly I've been losing vision on the project. If she somehow sees this, I hope she knows that I made this whole thing so she can feel that she is deserving of appreciation, love, and care. I want her to feel that she doesn't just deserve to be looked at but to be seen.\n\nI'd feel horrible if this project falls. I hope she smiles even just a bit if this is completed.",
-                "i-wish.txt": "I wish I was easier to understand. Am I too complicated? She's told me no. She is smart. I just don't want to make her feel like she doesn't know me or feel incapable of grasping who I am.\n\nI'm just afraid that if she fully understood me, everything about me, has seen me to my full exposure, that she would deem me unworthy of her time.\n\nHow could I have fallen so hard for such, when I myself am not worthy of all that I have?",
-                "file.txt": "do you like it?",
+                "justin-docs": {
+                    "information.txt": f"{UNDERLINE}{MAGENTA}ABOUT JUSTIN'S DOCS{RESET}\n\nThis is my own directory to write my plans, thoughts, and feelings. You can read them if you'd like!\n\nIf you don't want to do anything with this directory, you can just leave it as it is! :)",
+                    "school-plans.txt": f"{MAGENTA}MY SCHOOL PLANS (on 9/12/26){RESET}\n\nTo be honest, I've been winging it for school. I don't have an in-depth plan about what I want to do for school. That's probably why I'm not as successful as I'd like to be.\n\nIt's not like I don't have a plan at all. I just simply don't know whether my plan is good for me or not.\n\nChances are that I'm not going to the Air Force Academy. Maybe I'll go to UNLV. Honestly, I'm not too sure. I'm trying to be hopeful but realistic.\n\nAnyway, I need to do some physics work.",
+                    "projects.txt": f"{MAGENTA}MY ONGOING PROJECTS{RESET}\n\nI've been working on a few personal projects. Many of them are for fun and to give me something to do.\n\n- Termy: A terminal with secrets and is a gift for someone special.\n- TCL (Termy's Command Line): An underground command line for Termy that is the deeper part of the terminal.\n- A Cafe & Bakery Game: A game that is a cafe and bakery simulator. This is mainly for school but also for fun!\n- Notepad: A large notes archive for my school.",
+                },
                 "lezzell-docs": {
                     "information.txt": f"{UNDERLINE}{MAGENTA}ABOUT YOUR DOCS{RESET}\n\nThis is your own directory to write your thoughts or feelings in. You can delete this text file and make your own in here. If you don't want to do anything with this directory, you can just leave it as it is! :)",
+                    "when-you-feel": {
+                        "sadness": f"{UNDERLINE}{MAGENTA}When you feel sad.{RESET}\n\n",
+                    }
                 },
             },
             "terminal": {
@@ -157,8 +161,8 @@ filesystem = define_filesystem()
 
 # System Variables
 system_storage: int = 64 # this python's way of stating a direct integer
-system_version = "1.9.69"
-last_update = "9/10/26"
+system_version = "1.9.7"
+last_update = "9/17/26"
 color_accent = MAGENTA
 command_line_color = GREEN
 admin_passcode: int = 8088
@@ -225,6 +229,7 @@ def save_data():
         "tcl_installed": elements.tcl_installed,
         "tcl_install_counter": elements.tcl_install_counter,
         "tcl_profile_setup": elements.tcl_profile_setup,
+        "tcl_gamemode": elements.tcl_gamemode,
         "unlocked_tmy": elements.unlocked_tmy,
         "unlocked_jsn": elements.unlocked_jsn,
         "unlocked_lzl": elements.unlocked_lzl,
@@ -265,6 +270,8 @@ def load_data():
     global tcl_installed
     global tcl_install_counter
     global tcl_profile_setup
+    global tcl_gamemode
+
     # Achievements
     global command_counter
     global gumarang_rarity_counter
@@ -338,6 +345,7 @@ def load_data():
     elements.tcl_installed = data["tcl_installed"]
     elements.tcl_install_counter = data["tcl_install_counter"]
     elements.tcl_profile_setup = data["tcl_profile_setup"]
+    elements.tcl_gamemode = data["tcl_gamemode"]
     elements.unlocked_tmy = data["unlocked_tmy"]
     elements.unlocked_jsn = data["unlocked_jsn"]
     elements.unlocked_lzl = data["unlocked_lzl"]
@@ -529,7 +537,7 @@ def tcl_install_sequence():
     int_two = random.randint(500, 799)
     session_id = f"{str(int_one)}-{str(int_two)}"
 
-    print(f"[{MAGENTA}| | | |{RESET} | | | | | |]")
+    print(f"[{MAGENTA}▆▆▆▆{RESET}▆▆▆▆▆▆]")
     time.sleep(0.04)
     print(f"{MAGENTA}init fishing-get !ping")
     time.sleep(0.04)
@@ -552,7 +560,7 @@ def tcl_install_sequence():
         time.sleep(1)
     
     time.sleep(2)
-    print(f"{RESET}[{MAGENTA}| | | | | | | | | |{RESET}]")
+    print(f"{RESET}[{MAGENTA}▆▆▆▆▆▆▆▆▆▆{RESET}]")
     print(f"{MAGENTA}${RESET} Installation successful.")
 
 def main_terminal():
@@ -859,7 +867,7 @@ def main_terminal():
         elif command in ("cinnamoroll", "cr", "gumarang"):
             print(f"You need to unlock a certain rarity {LIGHT_BLUE}cinnamoroll{RESET}.")
 
-        # Good morning, afternoon, evening, or night
+        # ⏱️ Good morning, afternoon, evening, or night
         if user_input.lower().strip() in ("good morning", "gm", "morning", "goodmorning"):
             current_hour = datetime.now().hour
             if 5 <= current_hour < 12:
@@ -975,6 +983,11 @@ def main_terminal():
         if command == "-up":
             save_data()
             break
+
+        # 🔢 Displaying the total inputs
+        if command == "-inp":
+            print(f"{color_accent}Total Inputs{RESET}: {command_counter}")
+            continue
 
         # Conditionals
         """
@@ -1371,6 +1384,7 @@ def main_terminal():
 
             elif argument in ("-ver", "-version"):
                 print(f"{color_accent}System Version{RESET}: {system_version}")
+                print(f"{GRAY}Last updated on {last_update}{RESET}")
 
             elif argument in ("-sts", "-status"):
                 print(f"{color_accent}User Status{RESET}: {user_status}")
@@ -1975,6 +1989,7 @@ def main_terminal():
         - This command line is not like the terminal from Termy. This is like the outer parts of the terminal.
         - This is the small version of TCL in Termy. To get the full thing, you must install TCL!
         """
+
         tcl_arguments = ["-int", "-install", "-unintstall", "-status", "-help", "-?"]
         if command_part[0] == "tcl":
             if len(command_part) < 2:
@@ -2001,11 +2016,20 @@ def main_terminal():
             
             if argument in ("-unint", "-uninstall"):
                 if elements.tcl_installed:
-                    print(f"{MAGENTA}${RESET} Uninstalling...")
-                    time.sleep(4)
-                    elements.tcl_installed = False
-                    system_storage += 12
-                    print(f"{MAGENTA}${RESET} Done!")
+                    print(f"{MAGENTA}${RESET} Are you sure you want to uninstall TCL (Termy's Command Line)?")
+                    response = input(f"{GREEN}${RESET} ")
+                    if response in ("yes", "yeah", "y", "sure", "i guess", "yep", "yuh", "yah", "yesh"):
+                        print(f"{MAGENTA}uninstalling tcl.package{RESET}")
+                        time.sleep(0.03)
+                        print(f"{MAGENTA}user@termy:~$ {user}")
+                        time.sleep(0.03)
+                        print(f"{MAGENTA}removing injects{RESET}")
+                        elements.tcl_installed = False
+                        system_storage += 12
+                        time.sleep(4)
+                        print(f"{MAGENTA}${RESET} TCL (Termy's Command Line) has been uninstalled.")
+                    else:
+                        print(f"{MAGENTA}${RESET} Your uninstall command has been canceled.")
                 else:
                     print(f"<{MAGENTA}Command Line: STOP{RESET}> You do not currently have TCL (Termy's Command Line) installed.")
 
@@ -2026,13 +2050,24 @@ def main_terminal():
                 print(f"{MAGENTA}${RESET} {elements.tcl_version}")
 
             if argument == "-gamemode" and elements.tcl_installed == True:
-                print(f"{MAGENTA}${RESET} Turning ON GFAMEOAOSDKO")
+                print(f"{MAGENTA}${RESET} Turning on gamemode will enable more features in the terminal and you cannot undo it.\nDo you want to continue?\n")
+                response = input(f"{GREEN}${RESET} ")
+                
+                if response in ("yes", "yeah", "y", "sure", "i guess", "yep", "yuh", "yah", "yesh"):
+                    elements.tcl_gamemode = True
+
 
             if argument == "-profile" and elements.tcl_installed == True:
                 if elements.tcl_profile_setup == False:
                     if len(command_part) > 2 and command_part[2] == "--setup":
+                        response_for_username = input(f"{MAGENTA}${RESET} Enter your username for your profile:\n{GREEN}${RESET} ")
+                        elements.tcl_username = response_for_username
+                        response_for_password = input(f"{MAGENTA}${RESET} Enter your password for your profile:\n{GREEN}${RESET} ")
+                        elements.tcl_password = response_for_password
+
+                        print(f"{MAGENTA}${RESET} You've successfully created a TCL profile!")
                         elements.tcl_profile_setup = True
-                        print(f"{MAGENTA}${RESET} Profile setup complete.")
+                        
                     print(f"{MAGENTA}${RESET} You currently do not have a profile set up.\n{GRAY}  To make a profile, use [tcl -profile --setup]")
                 else:
                     print(f"{MAGENTA}${RESET} Your profile is setup.")

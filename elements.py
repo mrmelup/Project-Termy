@@ -121,6 +121,13 @@ tcl_installed = False
 tcl_version = "1.3.3"
 tcl_install_counter = 0
 tcl_profile_setup = False
+tcl_gamemode = False
+
+# TCL Profile
+tcl_username = ""
+tcl_password = ""
+tcl_account_creation_date = ""
+tcl_account_deletion_date = ""
 
 def clear_console():
     os.system('cls' if os.name == 'nt' else 'clear')
