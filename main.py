@@ -50,6 +50,7 @@ valid_commands = {
     "pwd", "change", "ch", "resetdata", "tmy", "jsn",
     "lzl", "help-boost", "stat", "stats", "statistics",
     "tcl", "svd", "su", "-wordle", "-sudoku", "-2048",
+    "spy",
 }
 
 # For Keys 
@@ -162,7 +163,7 @@ filesystem = define_filesystem()
 # System Variables
 system_storage: int = 64 # this python's way of stating a direct integer
 system_version = "1.9.7"
-last_update = "9/17/26"
+last_update = "9/18/26"
 color_accent = MAGENTA
 command_line_color = GREEN
 admin_passcode: int = 8088
@@ -174,6 +175,7 @@ custom_command_line = ""
 overlord_secret_use = 0
 system_functions_password = "zcfmvpfl"
 system_functions_unlocked = False
+discovered_spy = False
 
 user_statuses = [
     "user",
@@ -211,6 +213,7 @@ def save_data():
         "custom_command_line": custom_command_line,
         "using_custom_command_line": using_custom_command_line,
         "using_relative_command_line": using_relative_command_line,
+        "discovered_spy": discovered_spy,
 
         # Strip usages
         "ping_usage": elements.ping_usage,
@@ -265,6 +268,7 @@ def load_data():
     global custom_command_line
     global using_custom_command_line
     global using_relative_command_line
+    global discovered_spy
 
     # TCL Variables
     global tcl_installed
@@ -329,6 +333,7 @@ def load_data():
     custom_command_line = data["custom_command_line"]
     using_custom_command_line = data["using_custom_command_line"]
     using_relative_command_line = data["using_relative_command_line"]
+    discovered_spy = data["discovered_spy"]
 
     elements.ping_usage = data["ping_usage"]
     elements.echo_usage = data["echo_usage"]
@@ -598,6 +603,7 @@ def main_terminal():
     global tcl_installed
     global tcl_install_counter
     global tcl_profile_setup
+    global discovered_spy
 
     # Usages for Strips
     global ping_usage
@@ -967,11 +973,12 @@ def main_terminal():
                         "a-routine.txt": f"{MAGENTA}{UNDERLINE}May 19, 2026{RESET} - Summer time is approaching\n\n{RED}System Overlord{RESET}: These exams are going to be rough with our time.\n{RED}System Overlord{RESET}: Are you sure we're going to be able to work during this week?\n{GREEN}The Treasurer{RESET}: Woahhh heck nahh.\n{GREEN}The Treasurer{RESET}: We cannot be doing allat while exams are going on.\n{RED}System Overlord{RESET}: What about some small changes?\n{GREEN}The Treasurer{RESET}: I'm not sure if I should trust that.\n{GREEN}The Treasurer{RESET}: You always end up adding too much. LIAR!!\n{RED}System Overlord{RESET}: I'm not a liar. I just like working on this project\n{GREEN}The Treasurer{RESET}: Okay, but what about your exaaams?\n{RED}System Overlord{RESET}: Well, it's not like I enjoy taking exams.\n{RED}System Overlord{RESET}: I just find it much more interesting and fun to be working on this.\n{GREEN}The Treasurer{RESET}: ",
                     }
                     if "ascii" not in filesystem["@main"]["users"]["justin"]:
+                        discovered_spy = True
                         print(f"{color_accent}*{RESET} You've unlocked a new directory called 'ascii' >> {command_line_color}@main/users/justin{RESET}!")
                         filesystem["@main"]["users"]["justin"]["ascii"] = {
                             "new-commands.txt": f"{MAGENTA}NEW COMMANDS FOR FUN{RESET}\n\nYou've found some new commands for ASCII art. These ASCII commands are simply for fun and you can discover some rare ones.\n\nTry {color_accent}spy{RESET} for Snoopy ASCII!",
                         }
-            elif command == "jsn" and unlocked_jsn == True:
+            elif command == "jsn" and unlocked_jsn == False:
                 print(f"{RED}>>{RESET} You need to have been administrator at least once to use this key")
 
             if command == "lzl" and discovered_echo_aot == True: # Unlocking her special directory --> Show that she is deserving of love!
@@ -988,6 +995,12 @@ def main_terminal():
         if command == "-inp":
             print(f"{color_accent}Total Inputs{RESET}: {command_counter}")
             continue
+
+        # 🐶 Snoopy Command Unlock
+        if command == "spy" and discovered_spy == True:
+            print(random.choice(ascii["snoopy"]))
+        elif command == "spy" and discovered_spy == False:
+            print(f"{RED}>>{RESET} You need to unlock admin permissions to use this command.")
 
         # Conditionals
         """
