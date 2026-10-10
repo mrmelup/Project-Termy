@@ -49,7 +49,8 @@ valid_commands = {
     "wordle", "strip", "strips", "2048", "whoami",
     "pwd", "change", "ch", "resetdata", "tmy", "jsn",
     "lzl", "help-boost", "stat", "stats", "statistics",
-    "tcl", "svd", "su",
+    "tcl", "svd", "su", "-wordle", "-sudoku", "-2048",
+    "spy",
 }
 
 # For Keys 
@@ -97,12 +98,16 @@ def define_filesystem():
                 }
             },
             "documents": {
-                "information.txt": f"{UNDERLINE}{MAGENTA}ABOUT THIS DIRECTORY{RESET}\n\nThis directory is a place where venting and inner thoughts reside. It is completely your choice to read and use it. If you feel like you don't want to ruin your current mood, don't read them.",
-                "maybe-i-should.txt": "I'm not sure if I'm going to get this project out to her. It's been far too long and honestly I've been losing vision on the project. If she somehow sees this, I hope she knows that I made this whole thing so she can feel that she is deserving of appreciation, love, and care. I want her to feel that she doesn't just deserve to be looked at but to be seen.\n\nI'd feel horrible if this project falls. I hope she smiles even just a bit if this is completed.",
-                "i-wish.txt": "I wish I was easier to understand. Am I too complicated? She's told me no. She is smart. I just don't want to make her feel like she doesn't know me or feel incapable of grasping who I am.\n\nI'm just afraid that if she fully understood me, everything about me, has seen me to my full exposure, that she would deem me unworthy of her time.\n\nHow could I have fallen so hard for such, when I myself am not worthy of all that I have?",
-                "file.txt": "do you like it?",
+                "justin-docs": {
+                    "information.txt": f"{UNDERLINE}{MAGENTA}ABOUT JUSTIN'S DOCS{RESET}\n\nThis is my own directory to write my plans, thoughts, and feelings. You can read them if you'd like!\n\nIf you don't want to do anything with this directory, you can just leave it as it is! :)",
+                    "school-plans.txt": f"{MAGENTA}MY SCHOOL PLANS (on 9/12/26){RESET}\n\nTo be honest, I've been winging it for school. I don't have an in-depth plan about what I want to do for school. That's probably why I'm not as successful as I'd like to be.\n\nIt's not like I don't have a plan at all. I just simply don't know whether my plan is good for me or not.\n\nChances are that I'm not going to the Air Force Academy. Maybe I'll go to UNLV. Honestly, I'm not too sure. I'm trying to be hopeful but realistic.\n\nAnyway, I need to do some physics work.",
+                    "projects.txt": f"{MAGENTA}MY ONGOING PROJECTS{RESET}\n\nI've been working on a few personal projects. Many of them are for fun and to give me something to do.\n\n- Termy: A terminal with secrets and is a gift for someone special.\n- TCL (Termy's Command Line): An underground command line for Termy that is the deeper part of the terminal.\n- A Cafe & Bakery Game: A game that is a cafe and bakery simulator. This is mainly for school but also for fun!\n- Notepad: A large notes archive for my school.",
+                },
                 "lezzell-docs": {
                     "information.txt": f"{UNDERLINE}{MAGENTA}ABOUT YOUR DOCS{RESET}\n\nThis is your own directory to write your thoughts or feelings in. You can delete this text file and make your own in here. If you don't want to do anything with this directory, you can just leave it as it is! :)",
+                    "when-you-feel": {
+                        "sadness": f"{UNDERLINE}{MAGENTA}When you feel sad.{RESET}\n\n",
+                    }
                 },
             },
             "terminal": {
@@ -157,8 +162,8 @@ filesystem = define_filesystem()
 
 # System Variables
 system_storage: int = 64 # this python's way of stating a direct integer
-system_version = "1.9.67"
-last_update = "8/10/26"
+system_version = "1.9.71"
+last_update = "10/9/26"
 color_accent = MAGENTA
 command_line_color = GREEN
 admin_passcode: int = 8088
@@ -170,6 +175,7 @@ custom_command_line = ""
 overlord_secret_use = 0
 system_functions_password = "zcfmvpfl"
 system_functions_unlocked = False
+discovered_spy = False
 
 user_statuses = [
     "user",
@@ -207,6 +213,7 @@ def save_data():
         "custom_command_line": custom_command_line,
         "using_custom_command_line": using_custom_command_line,
         "using_relative_command_line": using_relative_command_line,
+        "discovered_spy": discovered_spy,
 
         # Strip usages
         "ping_usage": elements.ping_usage,
@@ -224,6 +231,8 @@ def save_data():
         "admin_msg": elements.admin_msg,
         "tcl_installed": elements.tcl_installed,
         "tcl_install_counter": elements.tcl_install_counter,
+        "tcl_profile_setup": elements.tcl_profile_setup,
+        "tcl_gamemode": elements.tcl_gamemode,
         "unlocked_tmy": elements.unlocked_tmy,
         "unlocked_jsn": elements.unlocked_jsn,
         "unlocked_lzl": elements.unlocked_lzl,
@@ -259,10 +268,13 @@ def load_data():
     global custom_command_line
     global using_custom_command_line
     global using_relative_command_line
+    global discovered_spy
 
     # TCL Variables
     global tcl_installed
     global tcl_install_counter
+    global tcl_profile_setup
+    global tcl_gamemode
 
     # Achievements
     global command_counter
@@ -321,6 +333,7 @@ def load_data():
     custom_command_line = data["custom_command_line"]
     using_custom_command_line = data["using_custom_command_line"]
     using_relative_command_line = data["using_relative_command_line"]
+    discovered_spy = data["discovered_spy"]
 
     elements.ping_usage = data["ping_usage"]
     elements.echo_usage = data["echo_usage"]
@@ -336,6 +349,8 @@ def load_data():
     elements.admin_msg = data["admin_msg"]
     elements.tcl_installed = data["tcl_installed"]
     elements.tcl_install_counter = data["tcl_install_counter"]
+    elements.tcl_profile_setup = data["tcl_profile_setup"]
+    elements.tcl_gamemode = data["tcl_gamemode"]
     elements.unlocked_tmy = data["unlocked_tmy"]
     elements.unlocked_jsn = data["unlocked_jsn"]
     elements.unlocked_lzl = data["unlocked_lzl"]
@@ -527,7 +542,7 @@ def tcl_install_sequence():
     int_two = random.randint(500, 799)
     session_id = f"{str(int_one)}-{str(int_two)}"
 
-    print(f"[{MAGENTA}| | | |{RESET} | | | | | |]")
+    print(f"[{MAGENTA}▆▆▆▆{RESET}▆▆▆▆▆▆]")
     time.sleep(0.04)
     print(f"{MAGENTA}init fishing-get !ping")
     time.sleep(0.04)
@@ -550,7 +565,7 @@ def tcl_install_sequence():
         time.sleep(1)
     
     time.sleep(2)
-    print(f"[{MAGENTA}| | | | | | | | | |{RESET}]")
+    print(f"{RESET}[{MAGENTA}▆▆▆▆▆▆▆▆▆▆{RESET}]")
     print(f"{MAGENTA}${RESET} Installation successful.")
 
 def main_terminal():
@@ -587,6 +602,8 @@ def main_terminal():
     global user_statuses
     global tcl_installed
     global tcl_install_counter
+    global tcl_profile_setup
+    global discovered_spy
 
     # Usages for Strips
     global ping_usage
@@ -651,6 +668,8 @@ def main_terminal():
                 print(command_counter)
             elif argument == "counter99":
                 command_counter = 99
+            elif argument == "tclpro":
+                print(f"{elements.tcl_icon_default}")
 
         # 🎛️ Little Details
         """
@@ -684,7 +703,7 @@ def main_terminal():
             print(f"{color_accent}A reason for loving you! {RESET}--> {random.choice(reason)}")
             continue
         # Git, Vim, Pip, and Bash
-        if command_part[0] in ("git", "vim", "pip", "bash"):
+        if command_part[0] in ("git", "vim", "pip", "bash", "pip3"):
             print(f"This is a fake shell, so {GREEN}{command_part[0]}{RESET} is not available!\n{GRAY}For a simulated command line, use {UNDERLINE}tcl{RESET}{GRAY} for special things.{RESET}") # TCL = Termy's Command Line
             continue
         # Colors (Test the colors)
@@ -856,7 +875,7 @@ def main_terminal():
         elif command in ("cinnamoroll", "cr", "gumarang"):
             print(f"You need to unlock a certain rarity {LIGHT_BLUE}cinnamoroll{RESET}.")
 
-        # Good morning, afternoon, evening, or night
+        # ⏱️ Good morning, afternoon, evening, or night
         if user_input.lower().strip() in ("good morning", "gm", "morning", "goodmorning"):
             current_hour = datetime.now().hour
             if 5 <= current_hour < 12:
@@ -949,17 +968,19 @@ def main_terminal():
                     filesystem["@main"]["users"]["justin"]["details"] = {
                         "purpose.txt": f"{MAGENTA}{UNDERLINE}April 9, 2026{RESET} - Too late to quit?\n\n{MAGENTA}Prime Entity{RESET}: I understand your frustration. Please, relax.\n{RED}System Overlord{RESET}: How could I possibly calm down??\n{RED}System Overlord{RESET}: This project is severely overdue. It's my fault. MY fault.\n{MAGENTA}Prime Entity{RESET}: We'll move this project to be completed by April 29.\n{YELLOW}The Judge{RESET}: Looks likes this will be another forgotten projects you always do.\n{RED}System Overlord{RESET}: We've set so many due dates. How many times will we have to extend this project.\n{MAGENTA}Prime Entity{RESET}: Do you know what we are making?\n{MAGENTA}Prime Entity{RESET}: This project is not just a terminal, it's more so a gift.\n{YELLOW}The Judge{RESET}: There is no guarantee that she will like it.\n{YELLOW}The Judge{RESET}: You're a hard worker for many faulty causes.\n{RED}System Overlord{RESET}: Should we just discontinue this project?\n{MAGENTA}Prime Entity{RESET}: Control yourself. We are far too deep to discontinue something like this.\n{YELLOW}The Judge{RESET}: There really isn't much you can do.\n{YELLOW}The Judge{RESET}: This project will just sit in your drive until you remember it once again.\n{MAGENTA}Prime Entity{RESET}: Your words have no importance to me.\n{YELLOW}The Judge{RESET}: What happened to the rest of our projects?\n{YELLOW}The Judge{RESET}: Do you see them anywhere? Something that is still working?\n{MAGENTA}Prime Entity{RESET}: And why should that be the deciding factor of whether or not this project is worth the time?\n{YELLOW}The Judge{RESET}: Realistically, you won't complete this project at all.\n{MAGENTA}Prime Entity{RESET}: You rid this place of peace. Get out.\n",
                         "regather.txt": f"{MAGENTA}{UNDERLINE}April 15, 2026{RESET} - Just for the fun\n\n{RED}System Overlord{RESET}: We're making some more progress.\n{MAGENTA}Prime Entity{RESET}: Huh? Did you add something?\n{RED}System Overlord{RESET}: I'm sorry, I'll remove it.\n{MAGENTA}Prime Entity{RESET}: Hold on, I haven't even seen it yet.\n{RED}System Overlord{RESET}: I added a couple special commands for fun.\n{RED}System Overlord{RESET}: Although, this project is pretty serious.\n{MAGENTA}Prime Entity{RESET}: Serious? What made you believe this project was so serious?\n{MAGENTA}Prime Entity{RESET}: You're allowed to have fun here, you know.\n{MAGENTA}Prime Entity{RESET}: If anything, I encourage you to take a more childish approach to this project.\n{RED}System Overlord{RESET}: I've always taken this project seriously. Wasn't that the whole thing before?\n{RED}System Overlord{RESET}: We didn't finish on time.\n{MAGENTA}Prime Entity{RESET}: Don't mind that now. Give yourself some room to be yourself.\n\n{GREEN}The Treasurer{RESET}: Why do you think I'm here?\n{RED}System Overlord{RESET}: Have you just been there the whole time?\n{GREEN}The Treasurer{RESET}: What do you mean? I can appear anywhere at anytime.\n{MAGENTA}Prime Entity{RESET}: Okay, but why are you here now?\n{GREEN}The Treasurer{RESET}: I dunno. Just felt like it.\n{MAGENTA}Prime Entity{RESET}: Well, that somewhat proves my point, don't you see?\n{RED}System Overlord{RESET}: Yeah, I see now.\n",
-                        "the-designer.txt": f"{MAGENTA}{UNDERLINE}April 21, 2026{RESET} - Back to design\n\n{CYAN}The Designer{RESET}: Isn't it a bit too early for this?\n{MAGENTA}Prime Entity{RESET}: What do you mean?\n{CYAN}The Designer{RESET}: It's pretty early in the morning. I can't really think of any ideas right now.\n{MAGENTA}Prime Entity{RESET}: That's completely fine. No worries about getting a good design at this second.\n{CYAN}The Designer{RESET}: Mm, okay. Do you think I can come back later?\n{MAGENTA}Prime Entity{RESET}: That's completely okay. Come back when you have an idea.\n{CYAN}The Designer{RESET}: Gotcha.\n\n{GREEN}The Treasurer{RESET}: Yo. Anything come up yet?\n{MAGENTA}Prime Entity{RESET}: We're going to have to wait for a design. He's out of ideas for the moment.\n{GREEN}The Treasurer{RESET}: Maybe I can make a design!\n{GREEN}The Treasurer{RESET}: Wait, design for what though?\n{MAGENTA}Prime Entity{RESET}: The contents of the C-Drive. We don't have anything in it right now.\n{GREEN}The Treasurer{RESET}: Oh.\n{GREEN}The Treasurer{RESET}: OH! MAKE IT RUN ON SNOOOPY.\n{MAGENTA}Prime Entity{RESET}: Huh?\n{GREEN}The Treasurer{RESET}: Have it run... on a picture of SNOOPY!\n{MAGENTA}Prime Entity{RESET}: Did you just come with that on the spot?\n{GREEN}The Treasurer{RESET}: Perchance.\n{MAGENTA}Prime Entity{RESET}: You can't just say perchance.\n{GREEN}The Treasurer{RESET}: Well I just did B).\n{MAGENTA}Prime Entity{RESET}: Y'know what? You win.\n{MAGENTA}Prime Entity{RESET}: But only because I'm in a good mood.\n\n{CYAN}The Designer{RESET}: I'm back. I have an idea.\n{MAGENTA}Prime Entity{RESET}: We have an idea already.\n{CYAN}The Designer{RESET}: Oh, what's this idea?\n{MAGENTA}Prime Entity{RESET}: Don't laugh.\n",
+                        "the-designer.txt": f"{MAGENTA}{UNDERLINE}April 21, 2026{RESET} - Back to design\n\n{CYAN}The Designer{RESET}: Isn't it a bit too early for this?\n{MAGENTA}Prime Entity{RESET}: What do you mean?\n{CYAN}The Designer{RESET}: It's pretty early in the morning. I can't really think of any ideas right now.\n{MAGENTA}Prime Entity{RESET}: That's completely fine. No worries about getting a good design at this second.\n{CYAN}The Designer{RESET}: Mm, okay. Do you think I can come back later?\n{MAGENTA}Prime Entity{RESET}: That's completely okay. Come back when you have an idea.\n{CYAN}The Designer{RESET}: Gotcha.\n\n{GREEN}The Treasurer{RESET}: Yo. Anything come up yet?\n{MAGENTA}Prime Entity{RESET}: We're going to have to wait for a design. He's out of ideas for the moment.\n{GREEN}The Treasurer{RESET}: Maybe I can make a design!\n{GREEN}The Treasurer{RESET}: Wait, design for what though?\n{MAGENTA}Prime Entity{RESET}: The contents of the C-Drive. We don't have anything in it right now.\n{GREEN}The Treasurer{RESET}: Oh.\n{GREEN}The Treasurer{RESET}: OH! MAKE IT RUN ON SNOOOPY.\n{MAGENTA}Prime Entity{RESET}: Huh?\n{GREEN}The Treasurer{RESET}: Have it run... on a picture of SNOOPY!\n{MAGENTA}Prime Entity{RESET}: Did you just come up with that on the spot?\n{GREEN}The Treasurer{RESET}: Perchance.\n{MAGENTA}Prime Entity{RESET}: You can't just say perchance.\n{GREEN}The Treasurer{RESET}: Well I just did B).\n{MAGENTA}Prime Entity{RESET}: Y'know what? You win.\n{MAGENTA}Prime Entity{RESET}: But only because I'm in a good mood.\n\n{CYAN}The Designer{RESET}: I'm back. I have an idea.\n{MAGENTA}Prime Entity{RESET}: We have an idea already.\n{CYAN}The Designer{RESET}: Oh, what's this idea?\n{MAGENTA}Prime Entity{RESET}: Don't laugh.\n",
                         "snoopy.tmy": f"\n{WHITE}⠀⠀⠀⠀⠀⠀⠰⡊⣿⣷⣂⠄⠀⠀⠀⠀⠀⠀⠀⠀\n⠀⠀⣀⣴⢶⠀⠀⠈⣉⣽⣯⠃⠀⠀⠀⠀⠀⠀⠀⠀\n⢀⢴⡿⡷⠁⣠⠊⠉⠂⠀⠀⠙⠒⠒⠒⠒⠢⢀⠀⠀\n⡜⣿⣿⣵⣶⡃⠀⠀⢀⡤⠂⠈⠉⠀⣀⡀⠀⠀⢆⠀\n⠙⠾⠿⠃⢹⠀⠀⠀⠀⠀⠀⠀⠀⠈⠋⠀⡀⠀⡞⠀\n⠀⠀⠀⠀⠘⢆⠀⠀⠀⠣⣀⠀⠀⠀⢀⡴⠵⠊⠀⠀\n⠀⠀⠀⠀⠀⠀⠑⣆⡤⠤⢬⠙⠉⡽⠋⢐⡲⢲⠀⠀\n⠀⠀⠀⠀⠀⢰⡓⠃⠷⠤⠴⠗⠈⠉⠈⠁⣀⢰⠃⠀\n⠀⠀⠀⠀⠀⠀⠥⣆⠖⠒⠢⡀⠀⠀⠈⢏⠈⠁⠀⠀\n⠀⠀⠀⠀⠀⠀⠀⠀⠀⢗⣤⠁⠀⠀⠀⠀⠃⠀⠀⠀\n⠀⠀⠀⠀⠀⠀⠀⢠⠊⢢⣇⠀⠀⠀⣀⢐⠗⡲⡰⢢\n⠀⠀⠀⠀⠀⠀⠀⠘⡆⠀⠉⠠⢏⡁⢸⢇⠄⢆⠔⡸\n⠀⠀⠀⠀⠀⠀⠀⠀⠈⠳⢤⣆⣂⡹⠸⣀⣃⡫⠞⠁{RESET}\n",
-                        "growth.txt": f"{MAGENTA}{UNDERLINE}April 29, 2026{RESET} - You are no different than I\n\n{MAGENTA}Prime Entity{RESET}: Wake up! It's the day we age.\n{RED}System Overlord{RESET}: You mean our birthday.\n{GREEN}The Treasurer{RESET}: Dude, you mean my birthday?\n{RED}System Overlord{RESET}: Huh? Wait. I thought we were just made? We weren't born?\n{MAGENTA}Prime Entity{RESET}: I said that?\n{RED}System Overlord{RESET}: Yeah, you did say something like that.\n{MAGENTA}Prime Entity{RESET}: Well, that's not entirely the truth.\n{MAGENTA}Prime Entity{RESET}: I was born. But you guys came along as the developer aged.\n{GREEN}The Treasurer{RESET}: Woah now, so we were all born at the same time?\n{MAGENTA}Prime Entity{RESET}: You existed the moment I was born, which is exactly the same time the developer was born.\n{RED}System Overlord{RESET}: I thought you are the developer.\n{MAGENTA}Prime Entity{RESET}: This seems to be a really hard concept to grasp for you guys.\n{CYAN}The Designer{RESET}: I mean yeah, we all thought the same thing.\n{RED}System Overlord{RESET}: Have you been hiding this from us?\n\n{MAGENTA}Prime Entity{RESET}: You are all the same. We are all the same.\n{MAGENTA}Prime Entity{RESET}: We are all the same, the same mind, the same protector and attacker. I am your greatest enemy and ally.\n{MAGENTA}Prime Entity{RESET}: I am no different than you. But rather, I probably should face punishment.\n{RED}System Overlord{RESET}: This entire time. I was you. And you were me. In the same body?\n{MAGENTA}Prime Entity{RESET}: Correct.\n{MAGENTA}Prime Entity{RESET}: You are the thoughts, the overthinking, the comfort, the designer, and the leader of the developer. You are simply being written.\n{GREEN}The Treasurer{RESET}: Oooh. Which am I?\n{MAGENTA}Prime Entity{RESET}: You're his comfort.\n{RED}System Overlord{RESET}: Wait, am I just the thoughts?\n{MAGENTA}Prime Entity{RESET}: Yes.\n\n{CYAN}The Designer{RESET}: Why do you say you deserve punishment?\n{MAGENTA}Prime Entity{RESET}: Many of the problems we face are due to my inability to control his emotions.\n{MAGENTA}Prime Entity{RESET}: He is not very tuned with his logic. He feels more than he thinks.\n{RED}System Overlord{RESET}: Is that why there is a judge?\n{MAGENTA}Prime Entity{RESET}: You're getting it now.\n\n{CYAN}The Designer{RESET}: So why did you. I mean, we... make this? For someone he likes?\n{MAGENTA}Prime Entity{RESET}: Because once she came, his logic and emotions, for the first time, felt in tune together.\n{MAGENTA}Prime Entity{RESET}: She removed the barriers of the belief that logic and emotion cannot be one.\n{MAGENTA}Prime Entity{RESET}: She was the only one willing to stay with us.\n{RED}System Overlord{RESET}: So she put up with us?\n{MAGENTA}Prime Entity{RESET}: I'm not sure how, you guys are already stressful enough.\n{GREEN}The Treasurer{RESET}: Wow, way to throw us under the bus.\n{MAGENTA}Prime Entity{RESET}: We're the same remember?\n{GREEN}The Treasurer{RESET}: Ohhh yeah. Right right.\n{RED}System Overlord{RESET}: I miss her.\n{MAGENTA}Prime Entity{RESET}: We can call her now.\n", # We are all the same, the same mind, the same protector and attacker. I am your greatest enemy and ally.
-                        "self-love.txt": f"{MAGENTA}{UNDERLINE}May 1, 2026{RESET} - It helped me, she did that\n\n{CYAN}"
+                        "growth.txt": f"{MAGENTA}{UNDERLINE}April 29, 2026{RESET} - You are no different than I\n\n{MAGENTA}Prime Entity{RESET}: Wake up! It's the day we age.\n{RED}System Overlord{RESET}: You mean our birthday.\n{GREEN}The Treasurer{RESET}: Dude, you mean my birthday?\n{RED}System Overlord{RESET}: Huh? Wait. I thought we were just made? We weren't born?\n{MAGENTA}Prime Entity{RESET}: I said that?\n{RED}System Overlord{RESET}: Yeah, you did say something like that.\n{MAGENTA}Prime Entity{RESET}: Well, that's not entirely the truth.\n{MAGENTA}Prime Entity{RESET}: I was born. But you guys came along as the developer aged.\n{GREEN}The Treasurer{RESET}: Woah now, so we were all born at the same time?\n{MAGENTA}Prime Entity{RESET}: You existed the moment I was born, which is exactly the same time the developer was born.\n{RED}System Overlord{RESET}: I thought you are the developer.\n{MAGENTA}Prime Entity{RESET}: This seems to be a really hard concept to grasp for you guys.\n{CYAN}The Designer{RESET}: I mean yeah, we all thought the same thing.\n{RED}System Overlord{RESET}: Have you been hiding this from us?\n\n{MAGENTA}Prime Entity{RESET}: You are all the same. We are all the same.\n{MAGENTA}Prime Entity{RESET}: We are all the same, the same mind, the same protector and attacker. I am your greatest enemy and ally.\n{MAGENTA}Prime Entity{RESET}: I am no different than you. But rather, I probably should face punishment.\n{RED}System Overlord{RESET}: This entire time. I was you. And you were me. In the same body?\n{MAGENTA}Prime Entity{RESET}: Correct.\n{MAGENTA}Prime Entity{RESET}: You are the thoughts, the overthinking, the comfort, the designer, and the leader of the developer. You are simply being written.\n{GREEN}The Treasurer{RESET}: Oooh. Which one am I?\n{MAGENTA}Prime Entity{RESET}: You're his comfort.\n{RED}System Overlord{RESET}: Wait, am I just the thoughts?\n{MAGENTA}Prime Entity{RESET}: Yes.\n\n{CYAN}The Designer{RESET}: Why do you say you deserve punishment?\n{MAGENTA}Prime Entity{RESET}: Many of the problems we face are due to my inability to control his emotions.\n{MAGENTA}Prime Entity{RESET}: He is not very tuned with his logic. He feels more than he thinks.\n{RED}System Overlord{RESET}: Is that why there is a judge?\n{MAGENTA}Prime Entity{RESET}: You're getting it now.\n\n{CYAN}The Designer{RESET}: So why did you. I mean, we... make this? For someone he likes?\n{MAGENTA}Prime Entity{RESET}: Because once she came, his logic and emotions, for the first time, felt in tune together.\n{MAGENTA}Prime Entity{RESET}: She removed the barriers of the belief that logic and emotion cannot be one.\n{MAGENTA}Prime Entity{RESET}: She was the only one willing to stay with us.\n{RED}System Overlord{RESET}: So she put up with us?\n{MAGENTA}Prime Entity{RESET}: I'm not sure how, you guys are already stressful enough.\n{GREEN}The Treasurer{RESET}: Wow, way to throw us under the bus.\n{MAGENTA}Prime Entity{RESET}: We're the same remember?\n{GREEN}The Treasurer{RESET}: Ohhh yeah. Right right.\n{RED}System Overlord{RESET}: I miss her.\n{MAGENTA}Prime Entity{RESET}: We can call her now.\n", # We are all the same, the same mind, the same protector and attacker. I am your greatest enemy and ally.
+                        "self-love.txt": f"{MAGENTA}{UNDERLINE}May 1, 2026{RESET} - She would have wanted you to\n\n{CYAN}The Designer{RESET}: What do you think of this design?\n{MAGENTA}Prime Entity{RESET}: I think it looks pretty neat.\n{MAGENTA}Prime Entity{RESET}: How come you made something for her? I didn't tell you to do that.\n{CYAN}The Designer{RESET}: Well, I thought it would be a nice touch to what we're making.\n{MAGENTA}Prime Entity{RESET}: You want to include it in the project?\n{CYAN}The Designer{RESET}: Yeah... do you not like it?\n{MAGENTA}Prime Entity{RESET}: I do like it. I'm simply curious.\n{CYAN}The Designer{RESET}: It's just my way of saying thanks.\n{MAGENTA}Prime Entity{RESET}: I find that very sweet of you.\n{CYAN}The Designer{RESET}: Well, I am you after all.\n{MAGENTA}Prime Entity{RESET}: Well we try our best.\n\n{CYAN}The Designer{RESET}: Honestly, what made you think about doing this?\n{CYAN}The Designer{RESET}: I know it's a 'thanks', but was that all there was to this project?\n{MAGENTA}Prime Enitty{RESET}: This wasn't the first programming project I've made for her. Many of them didn't go through.\n{MAGENTA}Prime Entity{RESET}: I told her I was working on something. A coding project. That has been going over the past couple of months.\n{MAGENTA}Prime Entity{RESET}: And each time, she has been eager to see it.\n{MAGENTA}Prime Entity{RESET}: That smile. The excitement in her voice. It drives me to finish this.\n{CYAN}The Designer{RESET}: She really is that special to you, huh?\n{MAGENTA}Prime Entity{RESET}: I really hope to marry her one day.\n{MAGENTA}Prime Entity{RESET}: That's something I never really say out loud.\n{CYAN}The Designer{RESET}: I like that you're able to be honest with yourself.\n{CYAN}The Designer{RESET}: I think she'll love this project.\n{MAGENTA}Prime Entity{RESET}: I hope so.\n{MAGENTA}Prime Entity{RESET}: It's not finished still. That's what is keeping me busy.\n{CYAN}The Designer{RESET}: I don't think she would have wanted you to stress about it so much.\n{MAGENTA}Prime Entity{RESET}: Yeah, but if I earned a dollar for each day I stressed myself out, I'd be retired by now.\n{CYAN}The Designer{RESET}: Relax a little. This project isn't just for her. Let it be a source of comfort for you.\n{MAGENTA}Prime Entity{RESET}: You're right.\n{CYAN}The Designer{RESET}: Don't feel bad about not having the project be finished for now.\n{CYAN}The Designer{RESET}: You work at your pace. There is nothing wrong with it.\n{MAGENTA}Prime Entity{RESET}: I guess I'm just really worried if she would like it.\n{CYAN}The Designer{RESET}: Let's just focus on having the project be finished.\n{CYAN}The Designer{RESET}: If you worry so much about how she won't like it, you'll make a product she actually won't like.\n{MAGENTA}Prime Entity{RESET}: You raise a good point.\n{MAGENTA}Prime Entity{RESET}: I'll take a break for now. Thank you for speaking to me.\n{CYAN}The Designer{RESET}: I'll head away too. No problem.\n",
+                        "a-routine.txt": f"{MAGENTA}{UNDERLINE}May 19, 2026{RESET} - Summer time is approaching\n\n{RED}System Overlord{RESET}: These exams are going to be rough with our time.\n{RED}System Overlord{RESET}: Are you sure we're going to be able to work during this week?\n{GREEN}The Treasurer{RESET}: Woahhh heck nahh.\n{GREEN}The Treasurer{RESET}: We cannot be doing allat while exams are going on.\n{RED}System Overlord{RESET}: What about some small changes?\n{GREEN}The Treasurer{RESET}: I'm not sure if I should trust that.\n{GREEN}The Treasurer{RESET}: You always end up adding too much. LIAR!!\n{RED}System Overlord{RESET}: I'm not a liar. I just like working on this projec.t\n{GREEN}The Treasurer{RESET}: Okay, but what about your exaaams?\n{RED}System Overlord{RESET}: Well, it's not like I enjoy taking exams.\n{RED}System Overlord{RESET}: I just find it much more interesting and fun to be working on this.\n{GREEN}The Treasurer{RESET}: ",
                     }
                     if "ascii" not in filesystem["@main"]["users"]["justin"]:
+                        discovered_spy = True
                         print(f"{color_accent}*{RESET} You've unlocked a new directory called 'ascii' >> {command_line_color}@main/users/justin{RESET}!")
                         filesystem["@main"]["users"]["justin"]["ascii"] = {
                             "new-commands.txt": f"{MAGENTA}NEW COMMANDS FOR FUN{RESET}\n\nYou've found some new commands for ASCII art. These ASCII commands are simply for fun and you can discover some rare ones.\n\nTry {color_accent}spy{RESET} for Snoopy ASCII!",
                         }
-            elif command == "jsn" and unlocked_jsn == True:
+            elif command == "jsn" and unlocked_jsn == False:
                 print(f"{RED}>>{RESET} You need to have been administrator at least once to use this key")
 
             if command == "lzl" and discovered_echo_aot == True: # Unlocking her special directory --> Show that she is deserving of love!
@@ -971,6 +992,17 @@ def main_terminal():
         if command == "-up":
             save_data()
             break
+
+        # 🔢 Displaying the total inputs
+        if command == "-inp":
+            print(f"{color_accent}Total Inputs{RESET}: {command_counter}")
+            continue
+
+        # 🐶 Snoopy Command Unlock
+        if command == "spy" and discovered_spy == True:
+            print(random.choice(ascii["snoopy"]))
+        elif command == "spy" and discovered_spy == False:
+            print(f"{RED}>>{RESET} You need to unlock admin permissions to use this command.")
 
         # Conditionals
         """
@@ -1367,6 +1399,7 @@ def main_terminal():
 
             elif argument in ("-ver", "-version"):
                 print(f"{color_accent}System Version{RESET}: {system_version}")
+                print(f"{GRAY}Last updated on {last_update}{RESET}")
 
             elif argument in ("-sts", "-status"):
                 print(f"{color_accent}User Status{RESET}: {user_status}")
@@ -1684,7 +1717,7 @@ def main_terminal():
                     }
 
             if command in ("run", "open") and filename.endswith(".exe"):
-                if filename == "cinnamoroll_fun.exe":
+                if filename == "cinnamoroll-fun.exe":
                     from cinnamoroll_app import app_cinnamoroll_run
                     app_cinnamoroll_run()
                     continue
@@ -1807,8 +1840,8 @@ def main_terminal():
 
             path_choices = {
                 "absolute": f"{command_line_color}{prompt}{RESET}", # After this, there are custom command lines!
-                "matuwid": f"{LIGHT_BLUE}[MVP{YELLOW}+{LIGHT_BLUE}] {user}{RESET}:",
-                "maiasa": f"{LIGHT_BLUE}[MVP{RED}+{LIGHT_BLUE}] {user}{RESET}:",
+                "matuwid": f"{LIGHT_BLUE}[MVP{YELLOW}+{LIGHT_BLUE}] Matuwid{RESET}:",
+                "maiasa": f"{LIGHT_BLUE}[MVP{RED}+{LIGHT_BLUE}] Maiasa{RESET}:",
                 "username": f"[{command_line_color}{user}{RESET}]",
                 "cinnamoroll": f"{LIGHT_BLUE}૮ ˶ᵔ ᵕ ᵔ˶ ა >>{RESET}",
             }
@@ -1844,7 +1877,7 @@ def main_terminal():
                 else:
                     print(f"{color_accent}Setting error{RESET}: No color '{color_name}' available.")
 
-            # The custom command line!
+            # The custom command line (path)!
             elif setting.startswith("path:"):
                 path_setting = setting.split(":")[1].lower()
                 if path_setting in path_choices:
@@ -1919,7 +1952,7 @@ def main_terminal():
                         continue
                     if set_status == "admin" or command == "su":
                         try:
-                            passcode_input = int(input(f"{RED}>>{RESET} You must enter the administration passcode\n{RED}>>{RESET} ")) # Because it's a number lol
+                            passcode_input = int(input(f"You must enter the administration passcode\n{RED}>>{RESET} ")) # Because it's a number lol
                         except ValueError:
                             print(f"{RED}>>{RESET} Passcode is numbers. Not characters.")
                             continue
@@ -1936,7 +1969,7 @@ def main_terminal():
         if command in "su":
             if user_status != "admin":
                 try:
-                    passcode_input = int(input(f"{RED}>>{RESET} You must enter the administration passcode\n{RED}>>{RESET} ")) # Because it's a number lol
+                    passcode_input = int(input(f"You must enter the administration passcode\n{RED}>>{RESET} ")) # Because it's a number lol
                 except ValueError:
                     print(f"{RED}>>{RESET} Passcode is numbers. Not characters.")
                     continue
@@ -1971,8 +2004,9 @@ def main_terminal():
         - This command line is not like the terminal from Termy. This is like the outer parts of the terminal.
         - This is the small version of TCL in Termy. To get the full thing, you must install TCL!
         """
+
         tcl_arguments = ["-int", "-install", "-unintstall", "-status", "-help", "-?"]
-        if command_part[0] in "tcl":
+        if command_part[0] == "tcl":
             if len(command_part) < 2:
                 print(f"{MAGENTA}")
                 print_centered("__    _____ ____ _        __")
@@ -1984,8 +2018,9 @@ def main_terminal():
                 print_centered("Termy's Command Line")
                 print_centered("Do [tcl -help] for more information")
                 print(f"{RESET}")  
+                continue
         
-            elif argument in ("-int", "-install"):
+            if argument in ("-int", "-install"):
                 if elements.tcl_installed:
                     print(f"<{MAGENTA}Command Line: STOP{RESET}> You already have TCL (Termy's Command Line) installed.")
                 else:
@@ -1994,34 +2029,67 @@ def main_terminal():
                     elements.tcl_install_counter += 1
                     elements.tcl_installed = True
             
-            elif argument in ("-unint", "-uninstall"):
+            if argument in ("-unint", "-uninstall"):
                 if elements.tcl_installed:
-                    print(f"{MAGENTA}${RESET} Uninstalling...")
-                    time.sleep(4)
-                    elements.tcl_installed = False
-                    system_storage += 12
-                    print(f"{MAGENTA}${RESET} Done!")
+                    print(f"{MAGENTA}${RESET} Are you sure you want to uninstall TCL (Termy's Command Line)?")
+                    response = input(f"{GREEN}${RESET} ")
+                    if response in ("yes", "yeah", "y", "sure", "i guess", "yep", "yuh", "yah", "yesh"):
+                        print(f"{MAGENTA}uninstalling tcl.package{RESET}")
+                        time.sleep(0.03)
+                        print(f"{MAGENTA}user@termy:~$ {user}")
+                        time.sleep(0.03)
+                        print(f"{MAGENTA}removing injects{RESET}")
+                        elements.tcl_installed = False
+                        system_storage += 12
+                        time.sleep(4)
+                        print(f"{MAGENTA}${RESET} TCL (Termy's Command Line) has been uninstalled.")
+                    else:
+                        print(f"{MAGENTA}${RESET} Your uninstall command has been canceled.")
                 else:
                     print(f"<{MAGENTA}Command Line: STOP{RESET}> You do not currently have TCL (Termy's Command Line) installed.")
 
-            elif argument in "-status":
+            if argument == "-status":
                 if elements.tcl_installed == True:
                     print(f"{MAGENTA}${RESET} TCL (Termy's Command Line) is installed and updated.")
                 else:
                     print(f"{MAGENTA}${RESET} TCL (Termy's Command Line) is not installed on this terminal.")
             
-            elif argument in "-help":
+            if argument == "-help":
                 print(f"{MAGENTA}${RESET} Available Commands for TCL: {", ".join(tcl_arguments)}")
 
-            elif argument in "-?":
-                print(f"{MAGENTA}?{RESET} TCL is the inner shell of Termy. You'll find some even deeper things that cannot be seen in the regular shell.\n{MAGENTA}?{RESET} This is the system that is running the terminal. You cannot remove it or change it in any way.")
+            if argument == "-?":
+                print(f"{MAGENTA}?{RESET} TCL is the inner shell of Termy. You'll find some even deeper things that cannot be seen in the regular shell. This is the system that is running the terminal. You cannot remove it or change it in any way.")
 
             # You're going to need to install TCL before using this command.
-            elif argument in ("-ver", "-version") and elements.tcl_installed == True:
+            if argument in ("-ver", "-version") and elements.tcl_installed == True:
                 print(f"{MAGENTA}${RESET} {elements.tcl_version}")
 
-            elif argument in ("-gamemode") and elements.tcl_installed == True:
-                print(f"{MAGENTA}${RESET} Turning ON GFAMEOAOSDKO")
+            if argument == "-gamemode" and elements.tcl_profile_setup == True:
+                print(f"{MAGENTA}${RESET} Turning on gamemode will enable more features in the terminal and you cannot undo it. {GREEN}Do you want to continue?{RESET}")
+                response = input(f"{GREEN}⤷ {RESET} ")
+                
+                if response in ("yes", "yeah", "y", "sure", "i guess", "yep", "yuh", "yah", "yesh"):
+                    elements.tcl_gamemode = True
+                    print(f"{MAGENTA}${RESET} Gamemode has been enabled.")
+
+            if argument == "-profile" and elements.tcl_installed == True:
+                if elements.tcl_profile_setup == False:
+                    if len(command_part) > 2 and command_part[2] == "--setup":
+                        response_for_username = input(f"{MAGENTA}${RESET} Enter your username for your profile:\n{GREEN}⤷ {RESET} ")
+                        elements.tcl_username = response_for_username
+                        response_for_password = input(f"{MAGENTA}${RESET} Enter your password for your profile:\n{GREEN}⤷ {RESET} ")
+                        elements.tcl_password = response_for_password
+
+                        print(f"{MAGENTA}${RESET} Please wait a brief moment while your profile is being saved...")
+                        wait_time = random.randint(1, 3)
+                        time.sleep(wait_time)
+                        print(f"{MAGENTA}${RESET} Your TCL (Termy's Command Line) profile has been saved.\n  {GRAY}You now have access to TCL services and have the ability to save your data to a profile.{RESET}")
+                        elements.tcl_profile_setup = True
+                        continue
+                        
+                    print(f"{MAGENTA}${RESET} You currently do not have a profile set up.\n{GRAY}  To make a profile, use [tcl -profile --setup]")
+                else:
+                    print(f"hold on lol...")
 
 load_data()
 main_terminal()
