@@ -129,6 +129,16 @@ tcl_password = ""
 tcl_account_creation_date = ""
 tcl_account_deletion_date = ""
 
+tcl_icon_default = [
+    " ░░░░░░░░░░░░░░░",
+    " ░             ░",
+    " ░             ░",
+    " ░             ░",
+    " ░             ░",
+    " ░             ░",
+    " ░             ░",
+    " ░░░░░░░░░░░░░░░"]
+
 def clear_console():
     os.system('cls' if os.name == 'nt' else 'clear')
 

@@ -162,8 +162,8 @@ filesystem = define_filesystem()
 
 # System Variables
 system_storage: int = 64 # this python's way of stating a direct integer
-system_version = "1.9.7"
-last_update = "9/18/26"
+system_version = "1.9.71"
+last_update = "10/2/26"
 color_accent = MAGENTA
 command_line_color = GREEN
 admin_passcode: int = 8088
@@ -668,6 +668,8 @@ def main_terminal():
                 print(command_counter)
             elif argument == "counter99":
                 command_counter = 99
+            elif argument == "tclpro":
+                print(f"{elements.tcl_icon_default}")
 
         # 🎛️ Little Details
         """
@@ -1950,7 +1952,7 @@ def main_terminal():
                         continue
                     if set_status == "admin" or command == "su":
                         try:
-                            passcode_input = int(input(f"{RED}>>{RESET} You must enter the administration passcode\n{RED}>>{RESET} ")) # Because it's a number lol
+                            passcode_input = int(input(f"You must enter the administration passcode\n{RED}>>{RESET} ")) # Because it's a number lol
                         except ValueError:
                             print(f"{RED}>>{RESET} Passcode is numbers. Not characters.")
                             continue
@@ -1967,7 +1969,7 @@ def main_terminal():
         if command in "su":
             if user_status != "admin":
                 try:
-                    passcode_input = int(input(f"{RED}>>{RESET} You must enter the administration passcode\n{RED}>>{RESET} ")) # Because it's a number lol
+                    passcode_input = int(input(f"You must enter the administration passcode\n{RED}>>{RESET} ")) # Because it's a number lol
                 except ValueError:
                     print(f"{RED}>>{RESET} Passcode is numbers. Not characters.")
                     continue
@@ -2056,35 +2058,38 @@ def main_terminal():
                 print(f"{MAGENTA}${RESET} Available Commands for TCL: {", ".join(tcl_arguments)}")
 
             if argument == "-?":
-                print(f"{MAGENTA}?{RESET} TCL is the inner shell of Termy. You'll find some even deeper things that cannot be seen in the regular shell.\n{MAGENTA}?{RESET} This is the system that is running the terminal. You cannot remove it or change it in any way.")
+                print(f"{MAGENTA}?{RESET} TCL is the inner shell of Termy. You'll find some even deeper things that cannot be seen in the regular shell. This is the system that is running the terminal. You cannot remove it or change it in any way.")
 
             # You're going to need to install TCL before using this command.
             if argument in ("-ver", "-version") and elements.tcl_installed == True:
                 print(f"{MAGENTA}${RESET} {elements.tcl_version}")
 
-            if argument == "-gamemode" and elements.tcl_installed == True:
-                print(f"{MAGENTA}${RESET} Turning on gamemode will enable more features in the terminal and you cannot undo it.\nDo you want to continue?\n")
-                response = input(f"{GREEN}${RESET} ")
+            if argument == "-gamemode" and elements.tcl_profile_setup == True:
+                print(f"{MAGENTA}${RESET} Turning on gamemode will enable more features in the terminal and you cannot undo it. {GREEN}Do you want to continue?{RESET}")
+                response = input(f"{GREEN}⤷ {RESET} ")
                 
                 if response in ("yes", "yeah", "y", "sure", "i guess", "yep", "yuh", "yah", "yesh"):
                     elements.tcl_gamemode = True
-
+                    print(f"{MAGENTA}${RESET} Gamemode has been enabled.")
 
             if argument == "-profile" and elements.tcl_installed == True:
                 if elements.tcl_profile_setup == False:
                     if len(command_part) > 2 and command_part[2] == "--setup":
-                        response_for_username = input(f"{MAGENTA}${RESET} Enter your username for your profile:\n{GREEN}${RESET} ")
+                        response_for_username = input(f"{MAGENTA}${RESET} Enter your username for your profile:\n{GREEN}⤷ {RESET} ")
                         elements.tcl_username = response_for_username
-                        response_for_password = input(f"{MAGENTA}${RESET} Enter your password for your profile:\n{GREEN}${RESET} ")
+                        response_for_password = input(f"{MAGENTA}${RESET} Enter your password for your profile:\n{GREEN}⤷ {RESET} ")
                         elements.tcl_password = response_for_password
 
-                        print(f"{MAGENTA}${RESET} You've successfully created a TCL profile!")
+                        print(f"{MAGENTA}${RESET} Please wait a brief moment while your profile is being saved...")
+                        wait_time = random.randint(1, 3)
+                        time.sleep(wait_time)
+                        print(f"{MAGENTA}${RESET} Your TCL (Termy's Command Line) profile has been saved.\n  {GRAY}You now have access to TCL services and have the ability to save your data to a profile.{RESET}")
                         elements.tcl_profile_setup = True
+                        continue
                         
                     print(f"{MAGENTA}${RESET} You currently do not have a profile set up.\n{GRAY}  To make a profile, use [tcl -profile --setup]")
                 else:
-                    print(f"{MAGENTA}${RESET} Your profile is setup.")
-                
+                    print(f"hold on lol...")
 
 load_data()
 main_terminal()
