@@ -164,6 +164,7 @@ filesystem = define_filesystem()
 system_storage: int = 64 # this python's way of stating a direct integer
 system_version = "1.9.71"
 last_update = "10/10/26"
+operating_system = ""
 color_accent = MAGENTA
 command_line_color = GREEN
 admin_passcode: int = 8088
@@ -181,6 +182,14 @@ user_statuses = [
     "user",
     "admin"
 ]
+
+# Choosing Operating System
+if platform.system() == "Windows":
+    operating_system = "Windows"
+elif platform.system() == "Darwin":
+    operating_system = "MacOS"
+else:
+    operating_system = "Linux"
 
 # Achievement Variables
 command_counter = 0
@@ -1404,6 +1413,9 @@ def main_terminal():
             elif argument in ("-sts", "-status"):
                 print(f"{color_accent}User Status{RESET}: {user_status}")
 
+            elif argument in ("-os", "-operating-system"):
+                print(f"{color_accent}User Operating System{RESET}: {operating_system}")
+
             else:
                 print(f"{color_accent}Unknown Argument{RESET}: no argument found")
         # Key Command
@@ -1438,7 +1450,7 @@ def main_terminal():
             dir_name = command_part[1]
             current_dir = get_current_dir()
 
-            if dir_name == "c_drive" or dir_name == "d_drive":
+            if dir_name == "c-drive" or dir_name == "d-drive":
                 if user_status == "admin":
                     if dir_name not in current_dir:
                         print(f"{color_accent}Directory Error{RESET}: '{dir_name}' not found.")
@@ -1456,10 +1468,14 @@ def main_terminal():
                         print(f"{RED}System Overlord{RESET}: You were warned...")
                         time.sleep(2)
                         break
-                else:
+                elif user_status != "admin" and operating_system == "Windows":
                     warning_box("Woah.. what are you trying to do?", "You cannot delete this directory due to it's importance. Please do not delete it.")
                     print(f"{color_accent}Directory Error{RESET}: You are not permitted to remove this directory.")
                     elements.delete_directory_attempts += 1
+                elif user_status != "admin" and operating_system == "Linux":
+                    print(f"{color_accent}Directory Error{RESET}: You are not permitted to remove this directory!")
+                elif user_status != "admin" and operating_system == "MacOS":
+                    print(f"{color_accent}Directory Error{RESET}: You are not permitted to remove this directory!")
 
                 if elements.delete_directory_attempts == 5:
                     random_dialogue = [

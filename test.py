@@ -1,9 +1,17 @@
-# PYTHON FILE FOR TESTING
+import platform
+import tkinter as tk
+from tkinter import messagebox
 
-import ctypes
+def warning_box(message, title="Warning"):
+  if platform.system() == "Windows":
+    import ctypes
 
-def show_error(title, message):
-    # 0x10 displays the red "X" error icon; 0x40000 ensures it stays on top
     ctypes.windll.user32.MessageBoxW(0, message, title, 0x30 | 0x40000)
+  else:
+    # Cross-platform fallback for macOS and Linux
+    root = tk.Tk()
+    root.withdraw()  # Hide the main tkinter window
+    messagebox.showwarning(title, message)
+    root.destroy()
 
-show_error("Warning", "Stop doing that")
+warning_box("This is a warning message.", "Warning")

@@ -9,10 +9,10 @@ import calendar
 import time
 import pickle
 import curses
-import ctypes
+import ctypes # (For Windows if needed --> message boxes)
+import platform
 import json
 import subprocess
-from pathlib import Path
 
 try:
     from playsound import playsound
