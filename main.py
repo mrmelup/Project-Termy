@@ -1,5 +1,6 @@
 # @justintsako
 # For Lezzell F. Gumarang
+# This is a check up!
 
 SAVE_FILE = "termy_data.json"
 
