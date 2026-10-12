@@ -1509,7 +1509,7 @@ def main_terminal():
         if command_part[0] == "cd" and len(command_part) > 1:
             path = command_part[1]
 
-            if path == "/":
+            if path in ("/", "@main", "~"):
                 if location == ["@main"]:
                     print(f"{color_accent}Directory Error{RESET}: You're already at the root.")
                 else:
