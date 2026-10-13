@@ -16,6 +16,24 @@ except ImportError:
     except ImportError:
         readline = None
 
+def terminal_input(prompt_text, color):
+    if readline is not None:
+        print(color, end="", flush=True)
+
+        def reset_input_color():
+            print(RESET, end="", flush=True)
+
+        readline.set_pre_input_hook(reset_input_color)
+
+        try:
+            return input(prompt_text)
+        finally:
+            readline.set_pre_input_hook(None)
+            print(RESET, end="", flush=True)
+
+    print(f"{color}{prompt_text}{RESET}", end="", flush=True)
+    return input("")
+
 if os.name == "nt":
     os.system("chcp 65001 > nul")   # Switch CMD to UTF-8
 
@@ -633,21 +651,14 @@ def main_terminal():
     print(start_message)
 
     while True:
-        prompt = f"{command_line_color}{"/".join(location)}>  {RESET}" # User Input
+        prompt = f"{'/'.join(location)}>  {RESET}"
 
         if using_custom_command_line:
-            print(f"{custom_command_line}{RESET}", end = "")
-            user_input = input("  ")
-        elif using_relative_command_line:
-            if len(location) <= 2:
-                print(f"{command_line_color}{"/".join(location)}>  {RESET}", end = "")
-                user_input = input("")
-            else:
-                print(f"{command_line_color}@main/../{location[-1]}>  {RESET}", end = "")
-                user_input = input("")
-        else:
-            print(f"{command_line_color}{prompt}{RESET}", end="")
-            user_input = input("")
+            prompt = f"{custom_command_line}{RESET}  "
+        elif using_relative_command_line and len(location) > 2:
+            prompt = f"{command_line_color}@main/../{location[-1]}>  {RESET}"
+
+        user_input = terminal_input(prompt, command_line_color)
 
         command_part = user_input.strip().split()
 

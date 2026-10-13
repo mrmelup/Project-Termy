@@ -13,6 +13,7 @@ import ctypes # (For Windows if needed --> message boxes)
 import platform
 import json
 import subprocess
+import re
 
 try:
     from playsound import playsound
