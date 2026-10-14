@@ -181,8 +181,8 @@ filesystem = define_filesystem()
 
 # System Variables
 system_storage: int = 64 # this python's way of stating a direct integer
-system_version = "1.9.71"
-last_update = "10/10/26"
+system_version = "1.9.72"
+last_update = "10/14/26"
 operating_system = ""
 color_accent = MAGENTA
 command_line_color = GREEN
