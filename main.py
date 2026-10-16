@@ -3,6 +3,7 @@
 # This is a check up!
 
 SAVE_FILE = "termy_data.json"
+ULTIMATE_DATA = "ultimate_data.json"
 
 from elements import *
 import elements
@@ -182,7 +183,7 @@ filesystem = define_filesystem()
 # System Variables
 system_storage: int = 64 # this python's way of stating a direct integer
 system_version = "1.9.72"
-last_update = "10/14/26"
+last_update = "10/15/26"
 operating_system = ""
 color_accent = MAGENTA
 command_line_color = GREEN
@@ -222,7 +223,27 @@ has_250_commands = False
 has_500_commands = False
 has_750_commands = False
 
-def save_data():
+def save_ultimate_data(): # For the game data to update forever btw
+    ultimate_data = {
+        "last_update": last_update,
+    }
+
+    with open(ULTIMATE_DATA, "w") as f:
+        json.dump(ultimate_data, f)
+
+def load_system_data(): # Loading that ultimate data for the game to update forever
+    global last_update
+
+    if not os.path.exists(ULTIMATE_DATA):
+        save_ultimate_data()
+        return
+
+    with open(ULTIMATE_DATA, "r") as f:
+        data = json.load(f)
+
+    last_update = data.get("last_update", last_update)
+
+def save_data(): # For file saves!
     data = {
         "filesystem": filesystem,
         "location": location,
@@ -691,6 +712,10 @@ def main_terminal():
                 command_counter = 99
             elif argument == "tclpro":
                 print(f"{elements.tcl_icon_default}")
+            elif argument == "-update":
+                last_update = datetime.now().strftime("%m/%d/%y")
+                save_ultimate_data()
+                print(f"Last update changed to {last_update}.")
 
         # 🎛️ Little Details
         """
@@ -1089,8 +1114,8 @@ def main_terminal():
             print(f"{RED}>>{RESET} Do you want to {RED}terminate{RESET} this session?")
             exit_input = input(f"{RED}>>{RESET} ").strip().lower()
             if exit_input in ("yes", "y", "sure", "mhm", "yuh", "yeh", "yesh"):
-                exiting_sequence()
                 save_data()
+                exiting_sequence()
                 break
             else:
                 continue
