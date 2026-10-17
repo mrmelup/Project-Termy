@@ -1,3 +1,6 @@
+<img width="547" height="221" alt="project-termy-image" src="https://github.com/user-attachments/assets/516a0477-c3d8-4f16-8f79-d9793d5da23c" />
+
+
 # ➜ Project-Termy
 This is a personal project that tests my Python ability and helps me learn more about the terminal. Termy is a fake shell that combines Linux and Bash to create an interesting interface for a terminal.
 
